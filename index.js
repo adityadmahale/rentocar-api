@@ -1,3 +1,6 @@
+const offerRouter = require("./routers/offers");
+const users = require("./routers/users");
+const auth = require("./routers/auth");
 const express = require("express");
 
 const app = express();
@@ -10,6 +13,9 @@ require("./startup/validation")();
 app.use(express.json());
 
 // Use routes here
+app.use("/api/offers", offerRouter);
+app.use("/api/users", users);
+app.use("/api/auth", auth);
 
 const port = process.env.PORT || 3000;
 
