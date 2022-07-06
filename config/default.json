@@ -1,4 +1,4 @@
 {
   "jwtPrivateKey": "abcd",
-  "db": "mongodb://localhost:27017/rentocar"
+  "db": "mongodb+srv://root:123gandhi@cluster0.vguam.mongodb.net/?retryWrites=true&w=majority"
 }

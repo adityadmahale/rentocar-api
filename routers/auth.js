@@ -18,7 +18,7 @@ route.get("/me", auth, async (req, res) => {
   }
 });
 
-route.post("/", async (req, res) => {
+route.post("/login", async (req, res) => {
   try {
     const schema = Joi.object({
       email: Joi.string()
