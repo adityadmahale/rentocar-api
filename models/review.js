@@ -30,6 +30,14 @@ const Review = mongoose.model(
       ref: "Vehicle",
       required: true,
     },
+    yes: {
+      type: Number,
+      required: true,
+    },
+    no: {
+      type: Number,
+      required: true,
+    },
   })
 );
 
@@ -50,6 +58,14 @@ module.exports.validateDelete = (object) => {
   const schema = Joi.object({
     user: Joi.objectId().required(),
     vehicle: Joi.objectId().required(),
+  });
+
+  return schema.validate(object);
+};
+
+module.exports.validateUpdate = (object) => {
+  const schema = Joi.object({
+    liked: Joi.boolean().required(),
   });
 
   return schema.validate(object);
