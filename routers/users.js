@@ -5,7 +5,7 @@ const { User, validate } = require("../models/user");
 
 const route = express.Router();
 
-route.post("/", async (req, res) => {
+route.post("/register", async (req, res) => {
   try {
     const { error } = validate(req.body);
     if (error)
