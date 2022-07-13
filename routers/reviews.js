@@ -33,7 +33,7 @@ router.post("/", [auth], async (req, res) => {
       rating: req.body.rating,
       title: req.body.title,
       description: req.body.description,
-      date: req.body.date,
+      date: Date.now(),
       user: req.body.user,
       vehicle: req.body.vehicle,
       yes: 0,
