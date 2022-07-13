@@ -9,9 +9,9 @@ const auth = require("../middleware/auth");
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
-    const reviews = await Review.find({ vehicle: req.body.vehicle }).populate(
+    const reviews = await Review.find({ vehicle: req.params.id }).populate(
       "user",
       "username"
     );
@@ -50,16 +50,13 @@ router.post("/", [auth], async (req, res) => {
   }
 });
 
-router.delete("/", [auth], async (req, res) => {
+router.delete("/:id", [auth], async (req, res) => {
   try {
-    const { error } = validateDelete(req.body);
-    if (error) return res.status(400).json(error.details[0].message);
-
-    const review = await Review.findOneAndDelete({
-      user: req.body.user,
-      vehicle: req.body.vehicle,
-    });
-    if (!review) return res.status(404).json(`The review was not found.`);
+    const review = await Review.findByIdAndRemove(req.params.id);
+    if (!review)
+      return res
+        .status(404)
+        .json(`The offer with the ID ${req.params.id} was not found.`);
     res.status(200).json(review);
   } catch (err) {
     res.status(500).json({
