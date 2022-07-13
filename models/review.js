@@ -46,7 +46,6 @@ module.exports.validate = (object) => {
     rating: Joi.number().min(0).max(5).required(),
     title: Joi.string().min(3).max(100).required(),
     description: Joi.string().min(3).max(100).required(),
-    date: Joi.date().required(),
     user: Joi.objectId().required(),
     vehicle: Joi.objectId().required(),
   });
