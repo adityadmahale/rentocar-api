@@ -24,6 +24,21 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.get("/:userId/:vehicleId", async (req, res) => {
+  try {
+    const review = await Review.findOne({
+      vehicle: req.params.vehicleId,
+      user: req.params.userId,
+    }).populate("user", "username");
+    res.status(200).json(review);
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+      success: false,
+    });
+  }
+});
+
 router.post("/", [auth], async (req, res) => {
   try {
     const { error } = validate(req.body);
