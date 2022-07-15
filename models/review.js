@@ -1,6 +1,9 @@
+// Author: Aditya Mahale(ad619659@dal.ca)
+
 const mongoose = require("mongoose");
 const Joi = require("joi");
 
+// Mongoose model and schema for reviews
 const Review = mongoose.model(
   "Review",
   new mongoose.Schema({
@@ -41,6 +44,7 @@ const Review = mongoose.model(
   })
 );
 
+// Request body validation for adding review
 module.exports.validate = (object) => {
   const schema = Joi.object({
     rating: Joi.number().min(0).max(5).required(),
@@ -53,6 +57,7 @@ module.exports.validate = (object) => {
   return schema.validate(object);
 };
 
+// Request body validation for deleting review
 module.exports.validateDelete = (object) => {
   const schema = Joi.object({
     user: Joi.objectId().required(),
@@ -62,6 +67,7 @@ module.exports.validateDelete = (object) => {
   return schema.validate(object);
 };
 
+// Request body validation for updating review
 module.exports.validateUpdate = (object) => {
   const schema = Joi.object({
     liked: Joi.boolean().required(),
