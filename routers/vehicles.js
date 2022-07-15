@@ -1,3 +1,4 @@
+/* Author: @104 Shaik Asaduddin (sh465111@dal.ca) - Maintainer */
 const express = require("express");
 const { Vehicle, validate } = require("../models/vehicle");
 const { Station } = require("../models/station");

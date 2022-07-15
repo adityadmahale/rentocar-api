@@ -1,3 +1,4 @@
+/* Author: @104 Shaik Asaduddin (sh465111@dal.ca) - Maintainer */
 const express = require("express");
 const { Station, validate } = require("../models/station");
 const auth = require("../middleware/auth");
