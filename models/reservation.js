@@ -1,14 +1,18 @@
 /*
 * @author: Maan Mandaliya (B00903171 | mn638205@dal.ca)
-* @description: Sample Description
+* @description: This is a MongoDB model to manage CRUD operations on Reservations collection.
 */
-
 const mongoose = require("mongoose");
 const Joi = require("joi");
 
-const Reservation = mongoose.model(
-    "Reservation",
+const Reservations = mongoose.model(
+    "Reservations",
     new mongoose.Schema({
+        number: {
+            type: Number,
+            required: true,
+            length: 6
+        },
         pickupPostal: {
             type: String,
             required: true,
@@ -28,40 +32,83 @@ const Reservation = mongoose.model(
             required: true,
         },
         pickupTime: {
-            type: Date,
+            type: String,
             required: true,
+            minlength: 4,
+            maxlength: 5
         },
         dropTime: {
-            type: Date,
+            type: String,
             required: true,
+            minlength: 4,
+            maxlength: 5
         },
         age: {
             type: Number,
             required: true,
+            min: 18,
+            max: 100
         },
         nationality: {
             type: String,
             required: true,
+            minlength: 8,
+            maxlength: 12
         },
         carType: {
             type: String,
             required: true,
+            minlength: 3,
+            maxlength: 9
+        },
+        price: {
+            type: Number,
+            required: true,
+            min: 0
+        },
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true
+        },
+        vehicle: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Vehicle",
+            required: true,
         },
         isCancelled: {
-            type: Boolean
+            type: Boolean,
+            default: false
         },
         cancellationReason: {
-            type: String
+            type: String,
+            default: null,
+            minlength: 10,
+            maxlength: 100
         }
     })
 );
 
 module.exports.validate = (object) => {
     const schema = Joi.object({
-
+        number: Joi.number().min(6).max(6).required(),
+        pickupPostal: Joi.string().min(6).max(6).required(),
+        dropPostal: Joi.string().min(6).max(6).required(),
+        pickupDate: Joi.date().required(),
+        dropDate: Joi.date().required(),
+        pickupTime: Joi.string().min(4).max(5).required(),
+        dropTime: Joi.string().min(4).max(5).required(),
+        age: Joi.number().min(18).max(100).required(),
+        nationality: Joi.string().minlength(8).maxlength(12).required(),
+        carType: Joi.string().minlength(3).maxlength(9).required(),
+        price: Joi.number().min(0).required(),
+        user: Joi.object().required(),
+        vehicle: Joi.object().required(),
+        isCancelled: Joi.bool(),
+        cancellationReason: Joi.string().min(10).max(100).required()
     });
 
     return schema.validate(object)
 };
 
-module.exports.Reservation = Reservation;
+module.exports.Reservations = Reservations;

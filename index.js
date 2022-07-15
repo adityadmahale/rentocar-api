@@ -4,6 +4,7 @@ const auth = require("./routers/auth");
 const vehicles = require("./routers/vehicles");
 const stations = require("./routers/stations");
 const reviews = require("./routers/reviews");
+const reservations = require("./routers/reservations")
 const express = require("express");
 
 const app = express();
@@ -22,7 +23,8 @@ app.use("/api/auth", auth);
 app.use("/api/vehicles", vehicles);
 app.use("/api/stations", stations);
 app.use("/api/reviews", reviews);
+app.use("/api/reservations", reservations)
 
 const port = process.env.PORT || 5000;
 
-app.listen(port, console.log("App Started"));
+app.listen(port, console.log(`App Started on ${port} PORT`));
