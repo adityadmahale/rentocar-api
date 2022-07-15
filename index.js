@@ -5,6 +5,7 @@ const vehicles = require("./routers/vehicles");
 const stations = require("./routers/stations");
 const reviews = require("./routers/reviews");
 const express = require("express");
+const payement = require("./routers/payment");
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use("/api/auth", auth);
 app.use("/api/vehicles", vehicles);
 app.use("/api/stations", stations);
 app.use("/api/reviews", reviews);
+app.use("/api/payment", payement);
 
 const port = process.env.PORT || 5000;
 
