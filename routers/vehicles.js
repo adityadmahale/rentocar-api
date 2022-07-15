@@ -19,20 +19,29 @@ router.get("/", async (req, res) => {
 });
 
 // Function to get vehicles from database according to user requirement
-router.get("/specificVehicles", async (req, res) => {
+router.post("/search", async (req, res) => {
   try {
-    const { reservationValues } = req.params;
-    console.log(reservationValues);
+    const reservationData = req.body;
+    console.log("vehicles.js (reservationData): ", reservationData);
     // Find station code from pickup postal code
-    const regex = new RegExp(`.*${reservationValues.pickupPostal}.*`, "i")
+    const regex = new RegExp(`.*${reservationData.pickupPostal}.*`, "i")
     const stations = await Station.find({ address: { $regex: regex } })
+    console.log("vehicles.js (stations): ", stations)
     var stationCodes = []
     stations.forEach(station => {
       stationCodes.push(station.stationCode)
     });
+    console.log("vehicles.js (stationCodes): ", stationCodes)
     // Find vehicles which are available at those stationCodes
     // Requirements: vehicle : type, stationCode, available
-    const vehicles = await Vehicle.find({ type: reservationValues.carType, stationCode: { $in: stationCodes }, available: true })
+    var vehicles;
+    if (reservationData.carType === "Any") {
+      vehicles = await Vehicle.find({ stationCode: { $in: stationCodes }, available: true }).sort({price:1});
+    }
+    else {
+      vehicles = await Vehicle.find({ type: reservationData.carType, stationCode: { $in: stationCodes }, available: true }).sort({price:1});
+    }
+    console.log("vehicles.js (vehicles): ", vehicles)
     res.status(200).json(vehicles);
   }
   catch (err) {
