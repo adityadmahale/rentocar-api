@@ -55,7 +55,7 @@ router.post("/add", async (req, res) => {
         const { vehicleError } = validateVehicle(vehicleModel);
         if (vehicleError) return res.status(400).json(vehicleError.details[0].message);
         const reservationModel = {
-            number: "123456",
+            number: "123457",
             // number: reservationJSON.number,
             pickupPostal: reservationJSON.pickupPostal,
             dropPostal: reservationJSON.dropPostal,
@@ -67,7 +67,7 @@ router.post("/add", async (req, res) => {
             nationality: reservationJSON.nationality,
             carType: reservationJSON.carType,
             price: reservationJSON.price,
-            username: "random123",
+            username: "random124",
             // username: reservationJSON.username,
             vehicle: vehicle,
             isCancelled: false,
