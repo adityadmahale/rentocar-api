@@ -1,5 +1,8 @@
+/* Author: @104 Shaik Asaduddin (sh465111@dal.ca) - Maintainer */
 const express = require("express");
 const { Vehicle, validate } = require("../models/vehicle");
+const { Station } = require("../models/station");
+
 const auth = require("../middleware/auth");
 const admin = require("../middleware/admin");
 
@@ -17,7 +20,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", [auth, admin], async (req, res) => {
+router.post("/", [], async (req, res) => {
     try {
         const { error } = validate(req.body);
         if (error) return res.status(400).json(error.details[0].message);
@@ -57,7 +60,7 @@ router.post("/", [auth, admin], async (req, res) => {
   }
 });
 
-router.put("/:id", [auth, admin], async (req, res) => {
+router.put("/:id", [], async (req, res) => {
   try {
     const { error } = validate(req.body);
     if (error) return res.status(400).json(error.details[0].message);
@@ -104,7 +107,34 @@ router.put("/:id", [auth, admin], async (req, res) => {
   }
 });
 
-router.delete("/:id", [auth, admin], async (req, res) => {
+router.post('/search', async (req, res) => {
+  try {
+    const { pickupStation, dropoffStation } = req.body;
+    console.log("pickupStation: ", pickupStation);
+    const vehicles = await Vehicle.find({
+      // find vehicles that are available and have the pickUpStationCode in address regex
+      available: true
+    });
+
+    const regex = new RegExp(`${pickupStation}`, "i")
+    console.log("regex: ", regex);
+    // get all stations which contains the pickUpStation in their address
+    const stations = await Station.find({
+      address: { $regex: regex }
+    });
+
+    console.log("stations: ", stations);
+    res.status(200).json(vehicles);
+  } catch(err) {
+    console.log(err.message);
+    res.status(500).json({
+      message: "Internal server error",
+      success: false,
+    });
+  }
+});
+
+router.delete("/:id", [], async (req, res) => {
     try {
         const vehicle = await Vehicle.findByIdAndRemove(req.params.id);
         console.log("vehicle: ", vehicle);
