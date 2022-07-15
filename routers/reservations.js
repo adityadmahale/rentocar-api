@@ -4,6 +4,7 @@
 */
 const express = require("express");
 const { Reservations, validate } = require("../models/reservation")
+const { Vehicle, validateVehicle } = require("../models/vehicle")
 const auth = require("../middleware/auth")
 const admin = require("../middleware/admin")
 
@@ -27,11 +28,35 @@ router.get("/", async (req, res) => {
 router.post("/add", async (req, res) => {
     try {
         const reservationJSON = req.body;
-        const { error } = validate(reservationJSON);
-        if (error) return res.status(400).json(error.details[0].message);
-
-        const reservation = new Reservations({
-            number: reservationJSON.number,
+        const vehicleModel = {
+            regnNo: reservationJSON.regnNo,
+            makeYear: reservationJSON.makeYear,
+            name: reservationJSON.name,
+            type: reservationJSON.type,
+            price: reservationJSON.price,
+            image: reservationJSON.image,
+            color: reservationJSON.color,
+            condition: reservationJSON.condition,
+            mileage: reservationJSON.mileage,
+            stationCode: reservationJSON.stationCode,
+            available: reservationJSON.available,
+            seats: reservationJSON.seats,
+            largeBag: reservationJSON.largeBag,
+            smallBag: reservationJSON.smallBag,
+            door: reservationJSON.door,
+            automatic: reservationJSON.automatic,
+            ac: reservationJSON.ac,
+            sportsMode: reservationJSON.sportsMode,
+            cruiseControl: reservationJSON.cruiseControl,
+            childCarSeat: reservationJSON.childCarSeat,
+        }
+        console.log("vehicleModel: ", vehicleModel);
+        const vehicle = new Vehicle(vehicleModel);
+        const { vehicleError } = validateVehicle(vehicleModel);
+        if (vehicleError) return res.status(400).json(vehicleError.details[0].message);
+        const reservationModel = {
+            number: "123456",
+            // number: reservationJSON.number,
             pickupPostal: reservationJSON.pickupPostal,
             dropPostal: reservationJSON.dropPostal,
             pickupDate: reservationJSON.pickupDate,
@@ -42,12 +67,34 @@ router.post("/add", async (req, res) => {
             nationality: reservationJSON.nationality,
             carType: reservationJSON.carType,
             price: reservationJSON.price,
-            user: reservationJSON.user,
-            vehicle: reservationJSON.vehicle
-        });
+            username: "random123",
+            // username: reservationJSON.username,
+            vehicle: vehicle,
+            isCancelled: false,
+            cancellationReason: ""
+        }
+        console.log("reservationModel: ", reservationModel);
+        const { reservationError } = validate(reservationModel);
+        if (reservationError) return res.status(400).json(reservationError.details[0].message);
+        const reservation = new Reservations(reservationModel);
         const result = await reservation.save();
 
         res.status(201).json(result)
+    }
+    catch (err) {
+        console.log("Error: ",err.message)
+        res.status(500).json({
+            message: "Internal Server Error",
+            success: false
+        })
+    }
+});
+
+router.delete("/:number", async (req, res) => {
+    try {
+        const number = req.params;
+        const result = await Reservations.findOneAndDelete({ number: number });
+        res.status(200).json(result)
     }
     catch (err) {
         res.status(500).json({
@@ -55,6 +102,10 @@ router.post("/add", async (req, res) => {
             success: false
         })
     }
+});
+
+router.put("/:number", async (req, res) => {
+    
 });
 
 module.exports = router;

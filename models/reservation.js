@@ -66,10 +66,11 @@ const Reservations = mongoose.model(
             required: true,
             min: 0
         },
-        user: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
-            required: true
+        username: {
+            type: String,
+            required: true,
+            minlength: 3,
+            maxlength: 50
         },
         vehicle: {
             type: mongoose.Schema.Types.ObjectId,
@@ -83,7 +84,7 @@ const Reservations = mongoose.model(
         cancellationReason: {
             type: String,
             default: null,
-            minlength: 10,
+            minlength: 0,
             maxlength: 100
         }
     })
@@ -99,13 +100,13 @@ module.exports.validate = (object) => {
         pickupTime: Joi.string().min(4).max(5).required(),
         dropTime: Joi.string().min(4).max(5).required(),
         age: Joi.number().min(18).max(100).required(),
-        nationality: Joi.string().minlength(8).maxlength(12).required(),
-        carType: Joi.string().minlength(3).maxlength(9).required(),
+        nationality: Joi.string().min(8).max(12).required(),
+        carType: Joi.string().min(3).max(9).required(),
         price: Joi.number().min(0).required(),
-        user: Joi.object().required(),
+        username: Joi.string().min(3).max(50),
         vehicle: Joi.object().required(),
         isCancelled: Joi.bool(),
-        cancellationReason: Joi.string().min(10).max(100).required()
+        cancellationReason: Joi.string().min(0).max(100).required()
     });
 
     return schema.validate(object)

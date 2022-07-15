@@ -1,5 +1,5 @@
 const express = require("express");
-const { Vehicle, validate } = require("../models/vehicle");
+const { Vehicle, validateVehicle: validate } = require("../models/vehicle");
 const { Station, stationValidate } = require("../models/station")
 const auth = require("../middleware/auth");
 const admin = require("../middleware/admin");
