@@ -8,6 +8,7 @@ const admin = require("../middleware/admin");
 
 const router = express.Router();
 
+// router path to get all vehicles
 router.get("/", async (req, res) => {
   try {
     const vehicles = await Vehicle.find();
@@ -20,11 +21,14 @@ router.get("/", async (req, res) => {
   }
 });
 
+// router path for creating a new vehicle
 router.post("/", [], async (req, res) => {
     try {
+        // validating the request body
         const { error } = validate(req.body);
         if (error) return res.status(400).json(error.details[0].message);
 
+        // creating a new vehicle
         const vehicle = new Vehicle({
             regnNo: req.body.regnNo,
             makeYear: req.body.makeYear,
@@ -60,6 +64,7 @@ router.post("/", [], async (req, res) => {
   }
 });
 
+// router path for updating a vehicle
 router.put("/:id", [], async (req, res) => {
   try {
     const { error } = validate(req.body);
@@ -134,6 +139,7 @@ router.post('/search', async (req, res) => {
   }
 });
 
+// router path for deleting a vehicle
 router.delete("/:id", [], async (req, res) => {
     try {
         const vehicle = await Vehicle.findByIdAndRemove(req.params.id);
