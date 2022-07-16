@@ -21,7 +21,7 @@ const Review = mongoose.model(
       type: String,
       required: true,
       minlength: 3,
-      maxlength: 1000,
+      maxlength: 2000,
     },
     date: {
       type: Date,
@@ -49,7 +49,7 @@ module.exports.validate = (object) => {
   const schema = Joi.object({
     rating: Joi.number().min(0).max(5).required(),
     title: Joi.string().min(3).max(100).required(),
-    description: Joi.string().min(3).max(100).required(),
+    description: Joi.string().min(3).max(2000).required(),
     user: Joi.objectId().required(),
     vehicle: Joi.objectId().required(),
   });
