@@ -6,6 +6,7 @@ const admin = require("../middleware/admin");
 
 const router = express.Router();
 
+// router path to get all stations
 router.get("/", async (req, res) => {
     try {
         const stations = await Station.find();
@@ -18,6 +19,7 @@ router.get("/", async (req, res) => {
     }
 });
 
+// router path for creating a new station
 router.post("/", [], async (req, res) => {
     try {
         const { error } = validate(req.body);
@@ -41,6 +43,7 @@ router.post("/", [], async (req, res) => {
     }
 });
 
+// router path for updating a station
 router.put("/:id", [], async (req, res) => {
     try {
         const { error } = validate(req.body);
@@ -71,6 +74,7 @@ router.put("/:id", [], async (req, res) => {
     }
 });
 
+// router path for deleting a station
 router.delete("/:id", [], async (req, res) => {
     try {
         const station = await Station.findByIdAndRemove(req.params.id);
