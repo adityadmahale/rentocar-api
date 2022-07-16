@@ -1,3 +1,5 @@
+// Author: Aditya Mahale(ad619659@dal.ca)
+
 const mongoose = require("mongoose");
 const config = require("config");
 

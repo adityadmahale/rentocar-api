@@ -1,3 +1,4 @@
+/* Author: @104 Shaik Asaduddin (sh465111@dal.ca) - Maintainer */
 const mongoose = require("mongoose");
 const Joi = require("joi");
 

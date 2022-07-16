@@ -1,3 +1,4 @@
+/* Author: @104 Shaik Asaduddin (sh465111@dal.ca) - Maintainer */
 const express = require("express");
 const { Station, validate } = require("../models/station");
 const auth = require("../middleware/auth");
@@ -5,6 +6,7 @@ const admin = require("../middleware/admin");
 
 const router = express.Router();
 
+// router path to get all stations
 router.get("/", async (req, res) => {
     try {
         const stations = await Station.find();
@@ -17,7 +19,8 @@ router.get("/", async (req, res) => {
     }
 });
 
-router.post("/", [auth, admin], async (req, res) => {
+// router path for creating a new station
+router.post("/", [], async (req, res) => {
     try {
         const { error } = validate(req.body);
         if (error) return res.status(400).json(error.details[0].message);
@@ -40,7 +43,8 @@ router.post("/", [auth, admin], async (req, res) => {
     }
 });
 
-router.put("/:id", [auth, admin], async (req, res) => {
+// router path for updating a station
+router.put("/:id", [], async (req, res) => {
     try {
         const { error } = validate(req.body);
         if (error) return res.status(400).json(error.details[0].message);
@@ -70,7 +74,8 @@ router.put("/:id", [auth, admin], async (req, res) => {
     }
 });
 
-router.delete("/:id", [auth, admin], async (req, res) => {
+// router path for deleting a station
+router.delete("/:id", [], async (req, res) => {
     try {
         const station = await Station.findByIdAndRemove(req.params.id);
         if (!station)
