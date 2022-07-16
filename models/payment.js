@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
 
-const Offer = mongoose.model(
+const Payment = mongoose.model(
   "Payment",
   new mongoose.Schema({
     bookingID: {
@@ -82,9 +82,10 @@ module.exports.validate = (object) => {
     state: Joi.string().min(3).max(50).required(),
     country: Joi.string().min(3).max(50).required(),
     zip: Joi.string().min(3).max(10).required(), 
+    insurance: Joi.boolean().required()
   });
 
   return schema.validate(object);
 };
 
-module.exports.Offer = Offer;
+module.exports.Payment = Payment;

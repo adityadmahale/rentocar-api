@@ -5,7 +5,7 @@ const admin = require("../middleware/admin");
 
 const router = express.Router();
 
-router.post("/", [auth, admin], async (req, res) => {
+router.post("/", [], async (req, res) => {
     try {
       const { error } = validate(req.body);
       if (error) return res.status(400).json(error.details[0].message);
@@ -25,11 +25,14 @@ router.post("/", [auth, admin], async (req, res) => {
       });
       await payment.save();
   
-      res.status(201).json(offer);
+      res.status(201).json(payment);
     } catch (err) {
+        console.log(err.message)
       res.status(500).json({
         message: "Internal server error",
         success: false,
       });
     }
   });
+
+  module.exports = router;
