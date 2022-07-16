@@ -13,7 +13,7 @@ const router = express.Router();
 // Method to get Reservations
 router.get("/", async (req, res) => {
     try {
-        const reservations = await Reservations.find();
+        const reservations = await Reservations.find({ isCancelled: false });
         res.status(200).json(reservations)
     }
     catch (err) {
@@ -50,7 +50,6 @@ router.post("/add", async (req, res) => {
             cruiseControl: reservationJSON.cruiseControl,
             childCarSeat: reservationJSON.childCarSeat,
         }
-        console.log("vehicleModel: ", vehicleModel);
         const vehicle = new Vehicle(vehicleModel);
         const { vehicleError } = validateVehicle(vehicleModel);
         if (vehicleError) return res.status(400).json(vehicleError.details[0].message);
@@ -73,7 +72,6 @@ router.post("/add", async (req, res) => {
             isCancelled: false,
             cancellationReason: ""
         }
-        console.log("reservationModel: ", reservationModel);
         const { reservationError } = validate(reservationModel);
         if (reservationError) return res.status(400).json(reservationError.details[0].message);
         const reservation = new Reservations(reservationModel);
@@ -82,7 +80,6 @@ router.post("/add", async (req, res) => {
         res.status(201).json(result)
     }
     catch (err) {
-        console.log("Error: ",err.message)
         res.status(500).json({
             message: "Internal Server Error",
             success: false
@@ -90,11 +87,26 @@ router.post("/add", async (req, res) => {
     }
 });
 
-router.delete("/:number", async (req, res) => {
+router.delete("/:id", async (req, res) => {
     try {
-        const number = req.params;
-        const result = await Reservations.findOneAndDelete({ number: number });
-        res.status(200).json(result)
+        const id = req.params['id'];
+        const result = await Reservations.findByIdAndUpdate(
+            id,
+            {
+                $set: {
+                    isCancelled: true,
+                    cancellationReason: "cancelled"
+                }
+            },
+            { new: true }
+        );
+        if (!result) return res.status(404).json({
+            message: "Reservation not found",
+            status: false
+        })
+        else {
+            res.status(200).json(result)
+        }
     }
     catch (err) {
         res.status(500).json({
@@ -105,7 +117,7 @@ router.delete("/:number", async (req, res) => {
 });
 
 router.put("/:number", async (req, res) => {
-    
+
 });
 
 module.exports = router;
