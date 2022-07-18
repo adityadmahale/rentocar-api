@@ -57,13 +57,13 @@ router.post("/add", async (req, res) => {
             number: reservationJSON.bookingID,
             pickupPostal: reservationJSON.pickupPostal,
             dropPostal: reservationJSON.dropPostal,
-            pickupDate: reservationJSON.pickupDate,
-            dropDate: reservationJSON.dropDate,
+            pickupDate: new Date(reservationJSON.pickupDate),
+            dropDate: new Date(reservationJSON.dropDate),
             pickupTime: reservationJSON.pickupTime,
             dropTime: reservationJSON.dropTime,
             age: reservationJSON.age,
             nationality: reservationJSON.nationality,
-            carType: reservationJSON.carType,
+            carType: reservationJSON.type,
             price: reservationJSON.price,
             username: reservationJSON.username,
             vehicle: vehicle,
@@ -88,12 +88,13 @@ router.post("/add", async (req, res) => {
 router.delete("/:id", async (req, res) => {
     try {
         const id = req.params['id'];
+        const { cancellationReason } = req.body;
         const result = await Reservations.findByIdAndUpdate(
             id,
             {
                 $set: {
                     isCancelled: true,
-                    cancellationReason: "cancelled"
+                    cancellationReason: cancellationReason
                 }
             },
             { new: true }
