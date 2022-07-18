@@ -57,6 +57,7 @@ router.post("/add", async (req, res) => {
             number: reservationJSON.bookingID,
             pickupPostal: reservationJSON.pickupPostal,
             dropPostal: reservationJSON.dropPostal,
+            registrationDate: new Date(),
             pickupDate: new Date(reservationJSON.pickupDate),
             dropDate: new Date(reservationJSON.dropDate),
             pickupTime: reservationJSON.pickupTime,

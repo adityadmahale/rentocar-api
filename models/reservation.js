@@ -23,6 +23,10 @@ const Reservations = mongoose.model(
             required: true,
             length: 6,
         },
+        registrationDate: {
+            type: Date,
+            required: true,
+        },
         pickupDate: {
             type: Date,
             required: true,
@@ -95,6 +99,7 @@ module.exports.validate = (object) => {
         number: Joi.string().min(6).max(6).required(),
         pickupPostal: Joi.string().min(6).max(6).required(),
         dropPostal: Joi.string().min(6).max(6).required(),
+        registrationDate: Joi.date().required(),
         pickupDate: Joi.date().required(),
         dropDate: Joi.date().required(),
         pickupTime: Joi.string().min(4).max(5).required(),
