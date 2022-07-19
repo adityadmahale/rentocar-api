@@ -90,6 +90,7 @@ router.delete("/:id", async (req, res) => {
     try {
         const id = req.params['id'];
         const { cancellationReason } = req.body;
+        console.log("Cancel: ", req.body)
         const result = await Reservations.findByIdAndUpdate(
             id,
             {
