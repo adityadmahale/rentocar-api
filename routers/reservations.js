@@ -52,7 +52,7 @@ router.post("/add", async (req, res) => {
         }
         const vehicle = new Vehicle(vehicleModel);
         const { vehicleError } = validateVehicle(vehicleModel);
-        if (vehicleError) return res.status(400).json(vehicleError.details[0].message + "vehicle error");
+        if (vehicleError) return res.status(400).json(vehicleError.details[0].message);
         const reservationModel = {
             number: reservationJSON.bookingID,
             pickupPostal: reservationJSON.pickupPostal,
@@ -72,7 +72,7 @@ router.post("/add", async (req, res) => {
             cancellationReason: ""
         }
         const { reservationError } = validate(reservationModel);
-        if (reservationError) return res.status(400).json(reservationError.details[0].message + "reservation error");
+        if (reservationError) return res.status(400).json(reservationError.details[0].message);
         const reservation = new Reservations(reservationModel);
         const result = await reservation.save()
 
