@@ -112,26 +112,32 @@ router.put("/:id", [], async (req, res) => {
   }
 });
 
-router.post('/search', async (req, res) => {
+router.post("/search", async (req, res) => {
   try {
-    const { pickupStation, dropoffStation } = req.body;
-    console.log("pickupStation: ", pickupStation);
-    const vehicles = await Vehicle.find({
-      // find vehicles that are available and have the pickUpStationCode in address regex
-      available: true
+    const reservationData = req.body;
+    console.log("vehicles.js (reservationData): ", reservationData);
+    // Find station code from pickup postal code
+    const regex = new RegExp(`.*${reservationData.pickupPostal}.*`, "i")
+    const stations = await Station.find({ address: { $regex: regex } })
+    console.log("vehicles.js (stations): ", stations)
+    var stationCodes = []
+    stations.forEach(station => {
+      stationCodes.push(station.stationCode)
     });
-
-    const regex = new RegExp(`${pickupStation}`, "i")
-    console.log("regex: ", regex);
-    // get all stations which contains the pickUpStation in their address
-    const stations = await Station.find({
-      address: { $regex: regex }
-    });
-
-    console.log("stations: ", stations);
+    console.log("vehicles.js (stationCodes): ", stationCodes)
+    // Find vehicles which are available at those stationCodes
+    // Requirements: vehicle : type, stationCode, available
+    var vehicles;
+    if (reservationData.carType === "Any") {
+      vehicles = await Vehicle.find({ stationCode: { $in: stationCodes }, available: true }).sort({price:1});
+    }
+    else {
+      vehicles = await Vehicle.find({ type: reservationData.carType, stationCode: { $in: stationCodes }, available: true }).sort({price:1});
+    }
+    console.log("vehicles.js (vehicles): ", vehicles)
     res.status(200).json(vehicles);
-  } catch(err) {
-    console.log(err.message);
+  }
+  catch (err) {
     res.status(500).json({
       message: "Internal server error",
       success: false,
@@ -141,20 +147,20 @@ router.post('/search', async (req, res) => {
 
 // router path for deleting a vehicle
 router.delete("/:id", [], async (req, res) => {
-    try {
-        const vehicle = await Vehicle.findByIdAndRemove(req.params.id);
-        console.log("vehicle: ", vehicle);
-        if (!vehicle)
-            return res
-                .status(404)
-                .json(`The vehicle with the ID ${req.params.id} was not found.`);
-        res.status(200).json(vehicle);
-    } catch (err) {
-        res.status(500).json({
-            message: "Internal server error",
-            success: false,
-        });
-    }
+  try {
+      const vehicle = await Vehicle.findByIdAndRemove(req.params.id);
+      console.log("vehicle: ", vehicle);
+      if (!vehicle)
+          return res
+              .status(404)
+              .json(`The vehicle with the ID ${req.params.id} was not found.`);
+      res.status(200).json(vehicle);
+  } catch (err) {
+      res.status(500).json({
+          message: "Internal server error",
+          success: false,
+      });
+  }
 });
 
 module.exports = router;
