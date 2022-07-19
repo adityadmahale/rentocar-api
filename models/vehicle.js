@@ -96,7 +96,7 @@ const Vehicle = mongoose.model(
     })
 );
 
-module.exports.validate = (object) => {
+module.exports.validateVehicle = (object) => {
     const schema = Joi.object({
         regnNo: Joi.number().min(1).required(),
         makeYear: Joi.number().min(1).required(),
