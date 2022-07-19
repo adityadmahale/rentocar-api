@@ -68,6 +68,7 @@ router.post("/add", async (req, res) => {
             price: reservationJSON.price,
             username: reservationJSON.username,
             vehicle: vehicle,
+            vehicleImage: reservationJSON.vehicleImage,
             isCancelled: false,
             cancellationReason: ""
         }

@@ -81,6 +81,10 @@ const Reservations = mongoose.model(
             ref: "Vehicle",
             required: true,
         },
+        vehicleImage: {
+            type: String,
+            required: true,
+        },
         isCancelled: {
             type: Boolean,
             default: false
@@ -110,6 +114,7 @@ module.exports.validate = (object) => {
         price: Joi.number().min(0).required(),
         username: Joi.string().min(3).max(50),
         vehicle: Joi.object().required(),
+        vehicleImage: Joi.string().required(),
         isCancelled: Joi.bool(),
         cancellationReason: Joi.string().min(0).max(100)
     });
