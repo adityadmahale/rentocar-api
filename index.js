@@ -5,6 +5,7 @@ const vehicles = require("./routers/vehicles");
 const stations = require("./routers/stations");
 const reviews = require("./routers/reviews");
 const reservations = require("./routers/reservations")
+const support = require("./routers/support")
 const express = require("express");
 const payment = require("./routers/payment");
 const reservationSummary = require("./routers/reservationSummary");
@@ -16,11 +17,12 @@ require("./startup/db")();
 require("./startup/config")();
 require("./startup/validation")();
 
-app.use(express.json({limit: '50mb'}));
+app.use(express.json({ limit: '50mb' }));
 
 // Use routes here
 app.use("/api/offers", offerRouter);
 app.use("/api/users", users);
+app.use("/api/support", support);
 app.use("/api/auth", auth);
 app.use("/api/vehicles", vehicles);
 app.use("/api/stations", stations);
