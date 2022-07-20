@@ -10,6 +10,9 @@ const weeks = ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5']
 // route to get yearly analysis data
 router.get("/getYearlyData", [], async (req, res) => {
     try {
+    if(JSON.parse(req.query.userDetails).isAdmin === undefined){
+        return res.status(401);
+    }
       // validate if the user is employee/admin or not
     allReservations = await Reservations.find({ isCancelled: false });
     let yearsColumns = [];
@@ -78,6 +81,9 @@ router.get("/getYearlyData", [], async (req, res) => {
 // route to get monthly analysis data
 router.get("/getMonthlyData", [], async (req, res) => {
     try {
+        if(JSON.parse(req.query.userDetails).isAdmin === undefined){
+            return res.status(401);
+        }
       // validate if the user is employee/admin or not
     allReservations = await Reservations.find({ isCancelled: false });
 
@@ -161,6 +167,9 @@ router.get("/getMonthlyData", [], async (req, res) => {
 // route to get daily analysis data
 router.get("/getDailyData", [], async (req, res) => {
     try {
+        if(JSON.parse(req.query.userDetails).isAdmin === undefined){
+            return res.status(401);
+        }
       // validate if the user is employee/admin or not
     allReservations = await Reservations.find({ isCancelled: false });
 
