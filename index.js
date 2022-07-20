@@ -8,6 +8,7 @@ const reservations = require("./routers/reservations")
 const support = require("./routers/support")
 const express = require("express");
 const payment = require("./routers/payment");
+const reservationSummary = require("./routers/reservationSummary");
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use("/api/stations", stations);
 app.use("/api/reviews", reviews);
 app.use("/api/reservations", reservations)
 app.use("/api/payment", payment);
+app.use("/api/reservationSummary", reservationSummary);
 
 const port = process.env.PORT || 5000;
 
