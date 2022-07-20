@@ -118,8 +118,57 @@ router.delete("/:id", async (req, res) => {
     }
 });
 
-router.put("/:number", async (req, res) => {
-
+router.put("/:id", async (req, res) => {
+    const id = req.params['id'];
+    const reservationJSON = req.body;
+    const vehicleModel = {
+        regnNo: reservationJSON.regnNo,
+        makeYear: reservationJSON.makeYear,
+        name: reservationJSON.name,
+        type: reservationJSON.type,
+        price: reservationJSON.price,
+        image: reservationJSON.image,
+        color: reservationJSON.color,
+        condition: reservationJSON.condition,
+        mileage: reservationJSON.mileage,
+        stationCode: reservationJSON.stationCode,
+        available: reservationJSON.available,
+        seats: reservationJSON.seats,
+        largeBag: reservationJSON.largeBag,
+        smallBag: reservationJSON.smallBag,
+        door: reservationJSON.door,
+        automatic: reservationJSON.automatic,
+        ac: reservationJSON.ac,
+        sportsMode: reservationJSON.sportsMode,
+        cruiseControl: reservationJSON.cruiseControl,
+        childCarSeat: reservationJSON.childCarSeat,
+    }
+    const vehicle = new Vehicle(vehicleModel);
+    const { vehicleError } = validateVehicle(vehicleModel);
+    if (vehicleError) return res.status(400).json(vehicleError.details[0].message);
+    const updatedReservationModel = {
+        number: reservationJSON.bookingID,
+        registrationDate: new Date(),
+        price: reservationJSON.price,
+        vehicle: vehicle,
+        vehicleImage: reservationJSON.vehicleImage,
+    }
+    const { reservationError } = validate(updatedReservationModel);
+    if (reservationError) return res.status(400).json(reservationError.details[0].message);
+    const result = await Reservations.findByIdAndUpdate(
+        id,
+        {
+            $set: updatedReservationModel
+        },
+        { new: true }
+    );
+    if (!result) return res.status(404).json({
+        message: "Reservation not found",
+        status: false
+    })
+    else {
+        res.status(200).json(result)
+    }
 });
 
 module.exports = router;
