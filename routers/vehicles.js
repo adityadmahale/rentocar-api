@@ -145,6 +145,30 @@ router.post("/search", async (req, res) => {
   }
 });
 
+router.post("/filterAllVehicles", async (req, res) => {
+  try {
+    let vehicles = [];
+    if (!req.body.regnNo) {
+      delete req.body.regnNo;
+    }
+    try {
+      vehicles = await Vehicle.find({
+        // find vehicles based on condition, vehicleType, available, ac, sportsMode, cruiseControl, childCarSeat
+        ...req.body
+      });
+    } catch (err) {
+      console.log(err);
+    }
+    res.status(200).json(vehicles);
+  }
+  catch (err) {
+    res.status(500).json({
+      message: "Internal server error",
+      success: false,
+    });
+  }
+});
+
 // router path for deleting a vehicle
 router.delete("/:id", [], async (req, res) => {
   try {

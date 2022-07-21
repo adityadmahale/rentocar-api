@@ -74,6 +74,26 @@ router.put("/:id", [], async (req, res) => {
     }
 });
 
+router.post('/search', async (req, res) => {
+    try {
+        let stations = [];
+        try {
+            stations = await Station.find({
+                ...req.body
+            });
+        } catch (err) {
+            console.log(err);
+        }
+        res.status(200).json(stations);
+    } catch (err) {
+        console.log(err.message);
+        res.status(500).json({
+            message: "Internal server error",
+            success: false,
+        });
+    }
+});
+
 // router path for deleting a station
 router.delete("/:id", [], async (req, res) => {
     try {
