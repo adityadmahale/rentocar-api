@@ -31,6 +31,7 @@ router.post("/", [auth, admin], async (req, res) => {
     const offer = new Offer({
       title: req.body.title,
       description: req.body.description,
+      discount: req.body.discount,
     });
     // Save the offer to the database
     await offer.save();
