@@ -19,6 +19,10 @@ const Offer = mongoose.model(
       minlength: 3,
       maxlength: 1000,
     },
+    discount: {
+      type: Number,
+      required: true,
+    },
   })
 );
 
@@ -27,6 +31,7 @@ module.exports.validate = (object) => {
   const schema = Joi.object({
     title: Joi.string().min(3).max(50).required(),
     description: Joi.string().min(3).max(1000).required(),
+    discount: Joi.number().min(1).max(90).required(),
   });
 
   return schema.validate(object);
