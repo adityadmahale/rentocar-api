@@ -8,6 +8,8 @@ const reservations = require("./routers/reservations")
 const express = require("express");
 const payment = require("./routers/payment");
 const reservationSummary = require("./routers/reservationSummary");
+const jobPosting = require("./routers/jobPostings")
+const jobApplication = require("./routers/jobApplications")
 
 const app = express();
 
@@ -28,6 +30,8 @@ app.use("/api/reviews", reviews);
 app.use("/api/reservations", reservations)
 app.use("/api/payment", payment);
 app.use("/api/reservationSummary", reservationSummary);
+app.use("/api/postings", jobPosting)
+app.use("/api/applications", jobApplication)
 
 const port = process.env.PORT || 5000;
 
